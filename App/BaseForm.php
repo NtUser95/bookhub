@@ -2,16 +2,16 @@
 
 namespace App;
 
-class BaseForm
+abstract class BaseForm
 {
 
-    private $errors = [];
+    private $_errors = [];
 
-    public function load()
+    public function load(): bool
     {
         $changed = false;
         foreach ($_POST as $key => $value) {
-            if (property_exists($this, $key)) {
+            if (strpos($key, '_') !== 0 && property_exists($this, $key)) {
                 $this->$key = $value;
                 $changed = true;
             }
@@ -20,19 +20,26 @@ class BaseForm
         return $changed;
     }
 
+    public function validateUploadData(): bool
+    {
+        return true;
+    }
+
+    public abstract function handleUploadData();
+
     public function hasErrors()
     {
-        return count($this->errors);
+        return $this->_errors;
     }
 
     public function getErrors()
     {
-        return $this->errors;
+        return $this->_errors;
     }
 
     public function addError(String $errMessage)
     {
-        $this->errors[] = $errMessage;
+        $this->_errors[] = $errMessage;
     }
 
     public function reset()

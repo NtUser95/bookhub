@@ -20,12 +20,11 @@ class BooksController extends Controller
     {
         $form = new EditForm();
         if ($form->load()) {
-            $form->processFormData();
-            if (!$form->hasErrors()) {
-                $status = ['status' => 'success', 'warnings' => ''];
+            if ($form->validateUploadData()) {
+                $form->handleUploadData();
                 $form->reset();
-            } else {
-                $status = ['status' => 'failed'];
+            } else { // show errors..
+
             }
         }
 
@@ -38,12 +37,11 @@ class BooksController extends Controller
     {
         $form = new AddForm();
         if ($form->load()) {
-            $form->processFormData();
-            if (!$form->hasErrors()) {
-                $status = ['status' => 'success', 'warnings' => ''];
+            if ($form->validateUploadData()) {
+                $form->handleUploadData();
                 $form->reset();
-            } else {
-                $status = ['status' => 'failed', 'warnings' => $form->getErrors()];
+            } else { // show errors..
+
             }
         }
 

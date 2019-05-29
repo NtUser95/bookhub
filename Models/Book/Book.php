@@ -18,6 +18,8 @@ class Book
     private $_name;
     /** @var string */
     private $_description;
+    /** @var integer */
+    private $_imageUrl;
 
     /**
      * @return int
@@ -123,6 +125,22 @@ class Book
     }
 
     /**
+     * @return int
+     */
+    public function getImageUrl(): int
+    {
+        return $this->_imageUrl;
+    }
+
+    /**
+     * @param int $imageUrl
+     */
+    public function setImageUrl(int $imageUrl)
+    {
+        $this->_imageUrl = $imageUrl;
+    }
+
+    /**
      * Создаёт экземпляр книги, принимает массив со следующими параметрами:
      * 1) string name
      * 2) string description
@@ -148,19 +166,22 @@ class Book
         $book->setPublishedDate($params['published_date']);
         $book->setAuthors($params['authors']);
         $book->setGenre($params['genres']);
+        $book->setImageUrl($params['cover_image_url']);
 
         if (isset($params['id']) && $params['id']) {
             $book->_id = (int)$params['id'];
         } else {
-            $sql = 'INSERT INTO book (`name`, `description`, `published_date`) VALUES ( :name , :description , :published_date );';
+            $sql = 'INSERT INTO book (`name`, `description`, `published_date`, `cover_image_url`) VALUES ( :name , :description , :published_date , :cover_image_url );';
             App::$db->execute($sql, [
                 ':name' => $params['name'],
                 ':description' => $params['description'],
                 ':published_date' => $params['published_date'],
+                ':cover_image_url' => $params['cover_image_url'],
             ]);
             $book->_id = (int)App::$db->getLastInsertId();
         }
 
         return $book;
     }
+
 }
