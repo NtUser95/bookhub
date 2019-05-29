@@ -1,0 +1,8 @@
+.book-block {
+    background-color: #cccccc;
+    margin: 10px;
+}
+
+.filter-dropdown {
+    display: inline-block;
+}
