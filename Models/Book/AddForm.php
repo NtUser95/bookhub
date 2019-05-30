@@ -44,7 +44,7 @@ class AddForm extends BaseForm
         $book = Book::create([
             'name' => $this->name,
             'description' => $this->description,
-            'published_date' => $this->published_date,
+            'published_date' => strtotime($this->published_date),
             'cover_image_url' => $imageUrl,
             'authors' => $authors,
             'genres' => $genres,

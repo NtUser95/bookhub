@@ -3,6 +3,7 @@
 namespace Models\Book;
 
 use App\App;
+use Models\Book\Author\Author;
 
 class Book
 {
@@ -18,7 +19,7 @@ class Book
     private $_name;
     /** @var string */
     private $_description;
-    /** @var integer */
+    /** @var string */
     private $_imageUrl;
 
     /**
@@ -127,15 +128,15 @@ class Book
     /**
      * @return int
      */
-    public function getImageUrl(): int
+    public function getImageUrl(): string
     {
         return $this->_imageUrl;
     }
 
     /**
-     * @param int $imageUrl
+     * @param string $imageUrl
      */
-    public function setImageUrl(int $imageUrl)
+    public function setImageUrl(string $imageUrl)
     {
         $this->_imageUrl = $imageUrl;
     }
@@ -166,14 +167,14 @@ class Book
         $book->setPublishedDate($params['published_date']);
         $book->setAuthors($params['authors']);
         $book->setGenre($params['genres']);
-        $book->setImageUrl($params['cover_image_url']);
+        $book->setImageUrl($params['cover_image_url'] ?? '');
 
         if (isset($params['id']) && $params['id']) {
             $book->_id = (int)$params['id'];
         } else {
-            $sql = 'INSERT INTO book (`name`, `description`, `published_date`, `cover_image_url`) VALUES ( :name , :description , :published_date , :cover_image_url );';
+            $sql = 'INSERT INTO book (`name`, `description`, `published_date`, `cover_image_url`) VALUES ( :f_name , :description , :published_date , :cover_image_url );';
             App::$db->execute($sql, [
-                ':name' => $params['name'],
+                ':f_name' => $params['name'],
                 ':description' => $params['description'],
                 ':published_date' => $params['published_date'],
                 ':cover_image_url' => $params['cover_image_url'],

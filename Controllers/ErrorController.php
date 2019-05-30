@@ -15,7 +15,7 @@ class ErrorController extends \App\Controller
     public function error500($error = null)
     {
         return $this->render('error500', [
-            'error' => json_encode($error),
+            'error' => $error[0]->getMessage(),
         ]);
     }
 }

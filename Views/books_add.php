@@ -26,17 +26,24 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <div class="form-group">
                         <label for="authorsTextarea">Автор</label>
                         <textarea name="authors" class="form-control" id="authorsTextarea" rows="3"></textarea>
                     </div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <div class="form-group">
                         <label for="genresTextarea">Жанры</label>
                         <textarea name="genres" class="form-control" id="genresTextarea" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                        <label for="published-date">Дата публикации</label>
+                        <input type="date" class="form-control" id="published-date" name="published_date">
                     </div>
                 </div>
             </div>
