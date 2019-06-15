@@ -30,7 +30,7 @@ class AddForm extends BaseForm
 
     public function handleUploadData()
     {
-        $imageUrl = 'zhopa';
+        $imageUrl = '';
         $authors = [];
         $genres = [];
 

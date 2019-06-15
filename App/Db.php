@@ -33,13 +33,13 @@ class Db
     public function execute(String $query, array $params = [])
     {
         $stmt = null;
-        $result = true;
         if (!is_array($params) || !$params) {
             $stmt = $this->pdo->query($query);
         } else {
+            $i = 1;
             $stmt = $this->pdo->prepare($query);
-            foreach ($params as $key => $value) {echo '<br> ' . ($key + 1) . '#' . $value;
-                $stmt->bindParam($key + 1, $value);
+            foreach ($params as $key => &$value) {
+                $stmt->bindParam($i++, $value);
             }
             $stmt->execute();
         }
