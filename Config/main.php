@@ -2,7 +2,7 @@
 return [
     'route' => [
         'rules' => [
-            'users/index?page=\d+' => 'users/index',
+            'managebook/edit?id=\d+' => 'managebook/edit',
             'users/index?page=\d+&sort=\w+&by=\w+' => 'users/index',
             '?page=\d+&sort=\w+&by=\w+' => 'users/index',
             '?page=\d+' => 'users/index',

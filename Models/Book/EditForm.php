@@ -2,14 +2,14 @@
 
 namespace Models\Book;
 
-use App\BaseForm;
 use Models\Book\Author\AuthorsRepository;
 use Models\Book\Genre\GenreRepository;
+use Models\Form\EditableForm;
 
-class EditForm extends BaseForm
+class EditForm extends EditableForm
 {
     public $id;
-    public $cover_image;
+    public $cover_image_url;
     public $name;
     public $description;
     public $published_date;
@@ -18,14 +18,14 @@ class EditForm extends BaseForm
 
     public function validateUploadData(): bool
     {
-        if (!$this->name || strlen($this->name) > 255) {
-            $this->addError('Некорректная длина названия.');
-        } elseif (strlen($this->description) > 255) {
-            $this->addError('Некорректная длина описания.');
-        } elseif (!$this->published_date && $this->published_date > 2149999999) {
+        if (!$this->id) {
+            $this->addError('Некорректный ID книги.');
+        } elseif ($this->name && strlen($this->name) > 255) {
+            $this->addError('Название книги не должо превышать 255 символов.');
+        } elseif ($this->name && strlen($this->description) > 255) {
+            $this->addError('Описание книги не должо превышать 255 символов.');
+        } elseif ($this->published_date && ((int) $this->published_date > 214999999999999 || (int) $this->published_date <= 0)) {
             $this->addError('Некорректная дата.');
-        } elseif (!$this->id) {
-            $this->addError('Некорректный ID');
         }
 
         return !$this->getErrors();
@@ -33,25 +33,38 @@ class EditForm extends BaseForm
 
     public function handleUploadData()
     {
-        $imageUrl = null;
-        $authors = [];
-        $genres = [];
+        $book = BooksRepository::get((int) $this->id);
 
         if ($this->authors) {
-            $authors = AuthorsRepository::findBy(['name' => $this->authors]);
+            $this->authors = trim(str_replace(', ', ',', $this->authors));
+            $rawAuthors = explode(',', $this->authors);
+            $authors = [];
+            foreach ($rawAuthors as $author) {
+                $authors = array_merge(AuthorsRepository::findBy(['name' => $author]), $authors);
+            }
+            $book->setAuthors($authors);
         }
         if ($this->genres) {
-            $genres = GenreRepository::findBy(['name' => $this->genres]);
+            $this->genres = str_replace(', ', ',', $this->genres);
+            $rawGenres = explode(',', $this->genres);
+            $genres = [];
+            foreach ($rawGenres as $genre) {
+                $genres = array_merge(GenreRepository::findBy(['name' => $genre]), $genres);
+            }
+            $book->setGenre($genres);
         }
-
-        $book = Book::create([
-            'name' => $this->name,
-            'description' => $this->description,
-            'published_date' => $this->published_date,
-            'cover_image_url' => $imageUrl,
-            'authors' => $authors,
-            'genres' => $genres,
-        ]);
+        if ($this->published_date && $fTime = strtotime($this->published_date)) {
+            $book->setPublishedDate($fTime);
+        }
+        if ($this->name) {
+            $book->setName($this->name);
+        }
+        if ($this->description) {
+            $book->setDescription($this->description);
+        }
+        if ($this->cover_image_url) {
+            $book->setImageUrl($this->cover_image_url);
+        }
 
         BooksRepository::save($book);
     }

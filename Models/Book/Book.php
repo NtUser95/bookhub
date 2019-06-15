@@ -4,16 +4,17 @@ namespace Models\Book;
 
 use App\App;
 use Models\Book\Author\Author;
+use Models\Book\Genre\Genre;
 
 class Book
 {
     /** @var integer */
     private $_id;
-    /** @var array */
+    /** @var Genre[] */
     private $_genre = [];
     /** @var integer */
     private $_publishedDate = 0;
-    /** @var array[] */
+    /** @var Author[] */
     private $_authors = [];
     /** @var string */
     private $_name;
@@ -31,7 +32,7 @@ class Book
     }
 
     /**
-     * @return array
+     * @return Author[]
      */
     public function getAuthors(): array
     {
@@ -39,7 +40,7 @@ class Book
     }
 
     /**
-     * @param array $authors
+     * @param Author[] $authors
      */
     public function setAuthors(array $authors)
     {
@@ -68,7 +69,7 @@ class Book
     }
 
     /**
-     * @return array
+     * @return Genre[]
      */
     public function getGenre(): array
     {
@@ -76,7 +77,7 @@ class Book
     }
 
     /**
-     * @param array $genre
+     * @param Genre[] $genre
      */
     public function setGenre(array $genre)
     {
@@ -118,10 +119,11 @@ class Book
     public function toAssocArray()
     {
         return [
+            'id' => $this->_id,
             'description' => $this->_description,
             'name' => $this->_name,
             'published_date' => $this->_publishedDate,
-            ''
+            'cover_image_url' => $this->_imageUrl,
         ];
     }
 

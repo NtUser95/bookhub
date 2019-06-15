@@ -142,7 +142,7 @@ class SearchQuery
      */
     public function execute()
     {
-        $sql = 'SELECT * FROM ' . $this->getTableName();
+        $sql = 'SELECT * FROM `' . $this->getTableName() . '`';
         $values = [];
         $preparedWhere = $this->_prepareWhere();
         if ($preparedWhere['query']) {
@@ -151,13 +151,13 @@ class SearchQuery
         }
         $prepareGroup = $this->_prepareGroup();
         if ($prepareGroup['query']) {
-            $sql .= ' GROUP BY ' . $preparedWhere['query'];
+            $sql .= ' GROUP BY ' . $prepareGroup['query'];
         }
         $preparedLimit = $this->_prepareLimit();
         if ($preparedLimit['query']) {
             $sql .= ' LIMIT ' . $preparedLimit['query'];
             $values = array_merge($values, $preparedLimit['values']);
-        }
+        }var_dump($sql, $values);
 
         return App::$db->execute($sql, $values);
     }

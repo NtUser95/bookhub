@@ -2,7 +2,7 @@
 
 namespace Models\Book;
 
-use App\BaseForm;
+use Models\Form\BaseForm;
 use Models\Book\Author\AuthorsRepository;
 use Models\Book\Genre\GenreRepository;
 

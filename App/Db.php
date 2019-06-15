@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Exceptions\DatabaseException;
+use PDO;
 
 class Db
 {
@@ -12,7 +12,7 @@ class Db
     public function __construct()
     {
         $settings = $this->getPDOSettings();
-        $this->pdo = new \PDO($settings['dsn'], $settings['user'], $settings['pass'], null);
+        $this->pdo = new PDO($settings['dsn'], $settings['user'], $settings['pass'], null);
     }
 
     protected function getPDOSettings()
@@ -39,7 +39,7 @@ class Db
             $i = 1;
             $stmt = $this->pdo->prepare($query);
             foreach ($params as $key => &$value) {
-                $stmt->bindParam($i++, $value);
+                $stmt->bindValue($i++, $value);
             }
             $stmt->execute();
         }

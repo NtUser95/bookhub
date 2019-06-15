@@ -63,6 +63,40 @@ class BooksRepository
         return $books;
     }
 
+    /**
+     * @param int $id
+     * @return Book|null
+     */
+    public static function get(int $id):? Book
+    {
+        if (!$id) {
+            return null;
+        }
+
+        $book = null;
+        $bookSearchQuery = new SearchQuery('books');
+        $bookSearchQuery->addFilter('id', $id);
+
+        $dbData = $bookSearchQuery->execute();
+        if (is_array($dbData)) {
+            $data = [
+                'id' => $dbData[0]['id'],
+                'name' => $dbData[0]['name'],
+                'description' => $dbData[0]['description'],
+                'published_date' => $dbData[0]['published_date'],
+                'authors' => AuthorsRepository::findBy(['book_id' => (int) $dbData[0]['id']]),
+                'genres' => GenreRepository::findBy(['book_id' => (int) $dbData[0]['id']]),
+            ];
+            try {
+                $book = Book::create($data);
+            } catch (\Exception $e) {
+                trigger_error($e->getMessage());
+            }
+        }
+
+        return $book;
+    }
+
     public static function save(Book $book)
     {
         $sql = 'UPDATE `books` SET `name` = ?, `description` = ?, `published_date` = ? WHERE `id` = ?';

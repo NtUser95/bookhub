@@ -4,7 +4,7 @@ namespace App;
 
 class Router
 {
-
+    //TODO Что это такое?) Привести к человеческому виду
     public function resolve()
     {
         $temp = explode('?', urldecode($_SERVER['REQUEST_URI']));

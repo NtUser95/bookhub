@@ -4,19 +4,23 @@
         <meta charset="utf-8">
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/main.css">
     </head>
     <body>
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-            <h5 class="my-0 mr-md-auto font-weight-normal">Books Hub</h5>
+            <img class="my-0 mr-md-auto header-logo" src="/images/bookhub_logo.jpg" alt="logo">
             <nav class="my-2 my-md-0 mr-md-3">
-                <a class="p-2 text-dark" href="/books/">Главная</a>
-                <a class="p-2 text-dark" href="/books/add">Добавление</a>
-                <a class="p-2 text-dark" href="/books/edit">Редактирование</a>
+                <a class="p-2 text-dark" href="/books/index">Главная</a>
+                <a class="p-2 text-dark" href="/managebook/index">Редактирование</a>
             </nav>
         </div>
 
         <div class="container">
             <link rel="stylesheet" href="/css/books-index.css">
+
+            <div class="breadcrumbs">
+                breadcrumbs >> crumbs
+            </div>
 
             <?= $flashes ?>
             <?= $body ?>
@@ -24,7 +28,7 @@
             <footer class="pt-4 my-md-5 pt-md-5 border-top">
                 <div class="row">
                     <div class="col-12 col-md">
-                        <img class="mb-2" src="/docs/4.3.1/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+                        <img class="header-logo" src="/images/bookhub_logo.jpg" alt="logo">
                         <small class="d-block mb-3 text-muted">© 2017-2018</small>
                     </div>
                     <div class="col-6 col-md">

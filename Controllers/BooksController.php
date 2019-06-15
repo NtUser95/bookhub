@@ -3,8 +3,6 @@
 namespace Controllers;
 
 use \App\Controller;
-use Models\Book\AddForm;
-use Models\Book\EditForm;
 use Models\Book\BooksRepository;
 
 class BooksController extends Controller
@@ -16,37 +14,8 @@ class BooksController extends Controller
         ]);
     }
 
-    public function edit(): string
+    public function view($params = [])
     {
-        $form = new EditForm();
-        if ($form->load()) {
-            if ($form->validateUploadData()) {
-                $form->handleUploadData();
-                $form->reset();
-            } else { // show errors..
 
-            }
-        }
-
-        return $this->render('books_edit', [
-            'form' => $form,
-        ]);
-    }
-
-    public function add(): string
-    {
-        $form = new AddForm();
-        if ($form->load()) {
-            if ($form->validateUploadData()) {
-                $form->handleUploadData();
-                $form->reset();
-            } else { // show errors..
-
-            }
-        }
-
-        return $this->render('books_add', [
-            'form' => $form,
-        ]);
     }
 }

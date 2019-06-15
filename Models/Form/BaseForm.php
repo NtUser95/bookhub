@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Models\Form;
 
 abstract class BaseForm
 {
@@ -9,8 +9,12 @@ abstract class BaseForm
 
     public function load(): bool
     {
+        return $this->initializeFrom($_POST);
+    }
+
+    public function initializeFrom($source): bool {
         $changed = false;
-        foreach ($_POST as $key => $value) {
+        foreach ($source as $key => $value) {
             if (strpos($key, '_') !== 0 && property_exists($this, $key)) {
                 $this->$key = $value;
                 $changed = true;
