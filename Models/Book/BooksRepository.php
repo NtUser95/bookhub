@@ -65,12 +65,12 @@ class BooksRepository
 
     public static function save(Book $book)
     {
-        $sql = 'UPDATE books SET `name` = :name , `description` = :desc , `published_date` = :pub_date WHERE `id` = :book_id';
+        $sql = 'UPDATE `books` SET `name` = ?, `description` = ?, `published_date` = ? WHERE `id` = ?';
         App::$db->execute($sql, [
-            ':name' => $book->getName(),
-            ':desc' => $book->getDescription(),
-            ':pub_date' => $book->getPublishedDate(),
-            ':book_id' => $book->getId(),
+            $book->getName(),
+            $book->getDescription(),
+            $book->getPublishedDate(),
+            $book->getId(),
         ]);
         foreach ($book->getGenre() as $genre) {
             if (GenreRepository::getRelated($book->getId(), $genre->getId()) !== null) {

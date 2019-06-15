@@ -3,7 +3,6 @@
 namespace Models\Book\Genre;
 
 use App\App;
-use Models\Book\Book;
 use Models\Book\SearchQuery;
 
 class GenreRepository
@@ -20,6 +19,9 @@ class GenreRepository
         }
         if (isset($params['limit'])) {
             $searchQuery->setLimit($params['limit']);
+        }
+        if (isset($params['name'])) {
+            $searchQuery->addFilter('name', $params['name']);
         }
 
         $dbData = $searchQuery->execute();
@@ -44,8 +46,8 @@ class GenreRepository
 
     public static function getRelated(int $bookId, int $genreId)
     {
-        $sql = 'SELECT g.* FROM genres LEFT JOIN books_genres bg ON g.id = bg.genre_id WHERE bg.book_id = :book_id AND bg.genre_id = :genre_id';
-        $dbData = App::$db->execute($sql, [':book_id' => $bookId, ':genre_id' => $genreId]);
+        $sql = 'SELECT g.* FROM genres LEFT JOIN books_genres bg ON g.id = bg.genre_id WHERE bg.book_id = ? AND bg.genre_id = ?';
+        $dbData = App::$db->execute($sql, [$bookId, $genreId]);
         if (is_array($dbData) && isset($dbData[0])) {
             return Genre::create($dbData[0]);
         } else {
@@ -60,8 +62,8 @@ class GenreRepository
      */
     public static function findRelated(int $bookId)
     {
-        $sql = 'SELECT g.* FROM genres LEFT JOIN books_genres bg ON g.id = bg.genre_id WHERE bg.book_id = :book_id';
-        $dbData = App::$db->execute($sql, [':book_id' => $bookId]);
+        $sql = 'SELECT g.* FROM genres LEFT JOIN books_genres bg ON g.id = bg.genre_id WHERE bg.book_id = ?';
+        $dbData = App::$db->execute($sql, [$bookId]);
         $genres = [];
         if (is_array($dbData)) {
             foreach ($dbData as $data) {
@@ -74,27 +76,27 @@ class GenreRepository
 
     public static function setRelated(int $bookId, int $genreId)
     {
-        return App::$db->execute('UPDATE `books_genres` SET `book_id` = :book_id WHERE `book_id` = :fbook_id AND `genre_id` = :genre_id', [
-            ':book_id' => $bookId,
-            ':f_book_id' => $bookId,
-            ':genre_id' => $genreId,
+        return App::$db->execute('UPDATE `books_genres` SET `book_id` = ? WHERE `book_id` = ? AND `genre_id` = ?', [
+            $bookId,
+            $bookId,
+            $genreId,
         ]);
     }
 
     public static function addRelated(int $bookId, int $genreId)
     {
-        return App::$db->execute('INSERT INTO `books_genres`(`book_id`, `genre_id`) VALUES (:book_id, :genre_id);', [
-            ':book_id' => $bookId,
-            ':genre_id' => $genreId,
+        return App::$db->execute('INSERT INTO `books_genres`(`book_id`, `genre_id`) VALUES (?, ?);', [
+            $bookId,
+            $genreId,
         ]);
     }
 
     public static function save(Genre $genre)
     {
-        $sql = 'UPDATE `genres` SET `name` = :name WHERE `id` = :genre_id';
+        $sql = 'UPDATE `genres` SET `name` = :name WHERE `id` = ?';
         App::$db->execute($sql, [
-            ':name' => $genre->getName(),
-            ':genre_id' => $genre->getId(),
+            $genre->getName(),
+            $genre->getId(),
         ]);
     }
 

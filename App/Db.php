@@ -28,7 +28,7 @@ class Db
      * @param String $query
      * @param array $params
      * @return array
-     * @throws DatabaseException
+     * @throws \Exception
      */
     public function execute(String $query, array $params = [])
     {
@@ -38,18 +38,14 @@ class Db
             $stmt = $this->pdo->query($query);
         } else {
             $stmt = $this->pdo->prepare($query);
-            foreach ($params as $key => $value) {
-                if (is_integer($value)) {
-                    $stmt->bindValue($key, $value, \PDO::PARAM_INT);
-                } else {
-                    $stmt->bindValue($key, $value);
-                }
+            foreach ($params as $key => $value) {echo '<br> ' . ($key + 1) . '#' . $value;
+                $stmt->bindParam($key + 1, $value);
             }
-            $result = $stmt->execute();
+            $stmt->execute();
         }
 
-        if (is_null($stmt) || $result === false) {
-            throw new DatabaseException($this->pdo->errorInfo());
+        if (is_null($stmt) || $this->pdo->errorInfo()[0] !== '00000') {
+            throw new \Exception(json_encode($this->pdo->errorInfo()));
         }
         return $stmt->fetchAll();
     }

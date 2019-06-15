@@ -21,6 +21,9 @@ class AuthorsRepository
         if (isset($params['limit'])) {
             $searchQuery->setLimit($params['limit']);
         }
+        if (isset($params['name'])) {
+            $searchQuery->addFilter('name', $params['name']);
+        }
 
         $dbData = $searchQuery->execute();
         $authors = [];
@@ -44,8 +47,8 @@ class AuthorsRepository
 
     public static function getRelated(int $bookId, int $authorId)
     {
-        $sql = 'SELECT g.* FROM authors LEFT JOIN books_authors bg ON g.id = bg.author_id WHERE bg.book_id = :book_id AND bg.author_id = :author_id';
-        $dbData = App::$db->execute($sql, [':book_id' => $bookId, ':author_id' => $authorId]);
+        $sql = 'SELECT g.* FROM authors LEFT JOIN books_authors bg ON g.id = bg.author_id WHERE bg.book_id = ? AND bg.author_id = ?';
+        $dbData = App::$db->execute($sql, [$bookId, $authorId]);
         if (is_array($dbData) && isset($dbData[0])) {
             return Author::create($dbData[0]);
         } else {
@@ -60,8 +63,8 @@ class AuthorsRepository
      */
     public static function findRelated(int $bookId)
     {
-        $sql = 'SELECT g.* FROM authors LEFT JOIN books_authors bg ON g.id = bg.author_id WHERE bg.book_id = :book_id';
-        $dbData = App::$db->execute($sql, [':book_id' => $bookId]);
+        $sql = 'SELECT g.* FROM authors LEFT JOIN books_authors bg ON g.id = bg.author_id WHERE bg.book_id = ?';
+        $dbData = App::$db->execute($sql, [$bookId]);
         $authors = [];
         if (is_array($dbData)) {
             foreach ($dbData as $data) {
@@ -74,27 +77,27 @@ class AuthorsRepository
 
     public static function setRelated(int $bookId, int $authorId)
     {
-        return App::$db->execute('UPDATE `books_authors` SET `book_id` = :book_id WHERE `book_id` = :fbook_id AND `author_id` = :author_id', [
-            ':book_id' => $bookId,
-            ':f_book_id' => $bookId,
-            ':author_id' => $authorId,
+        return App::$db->execute('UPDATE `books_authors` SET `book_id` = ? WHERE `book_id` = ? AND `author_id` = ?', [
+            $bookId,
+            $bookId,
+            $authorId,
         ]);
     }
 
     public static function addRelated(int $bookId, int $authorId)
     {
-        return App::$db->execute('INSERT INTO `books_authors`(`book_id`, `author_id`) VALUES (:book_id, :author_id);', [
-            ':book_id' => $bookId,
-            ':author_id' => $authorId,
+        return App::$db->execute('INSERT INTO `books_authors`(`book_id`, `author_id`) VALUES (?, ?);', [
+            $bookId,
+            $authorId,
         ]);
     }
 
     public static function save(Author $author)
     {
-        $sql = 'UPDATE `authors` SET `name` = :name WHERE `id` = :author_id';
+        $sql = 'UPDATE `authors` SET `name` = ? WHERE `id` = ?';
         App::$db->execute($sql, [
-            ':name' => $author->getName(),
-            ':author_id' => $author->getId(),
+            $author->getName(),
+            $author->getId(),
         ]);
     }
 

@@ -43,7 +43,7 @@ class SearchQuery
     public function addFilter($filterKey, $filterValue)
     {
         $this->_filters[] = [
-            $filterKey => $filterValue,
+            $filterKey, $filterValue,
         ];
     }
 
@@ -68,8 +68,9 @@ class SearchQuery
         $query = '';
         if ($this->_filters) {
             $queries = [];
-            foreach ($this->_filters as $filterKey => $filterValue) {
-                if (is_array($filterValue)) {
+            foreach ($this->_filters as $filterRule) {
+                [$filterKey, $filterValue] = $filterRule;
+                if (is_array($filterValue) && count($filterValue) > 1) {
                     $markers = array_fill(0, count($filterValue), '?');
                     $queries[] = '`' . Util::clearString($filterKey) . '` IN (' . implode(',', $markers) . ')';
                     $bindedValues = array_merge($bindedValues, $filterValue);
@@ -105,12 +106,12 @@ class SearchQuery
         $bindedValues = [];
 
         if ($this->_limit && !$this->_offset) {
-            $query .= ':limit';
+            $query .= '?';
             $bindedValues[] = $this->_limit;
         } else if ($this->_limit && $this->_offset) {
-            $query .= ':offset , :limit';
-            $bindedValues[':offset'] = (int)$this->_offset;
-            $bindedValues[':limit'] = (int)$this->_limit;
+            $query .= '? , ?';
+            $bindedValues[] = (int)$this->_offset;
+            $bindedValues[] = (int)$this->_limit;
         }
 
         return [

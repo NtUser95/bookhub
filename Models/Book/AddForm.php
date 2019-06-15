@@ -30,7 +30,7 @@ class AddForm extends BaseForm
 
     public function handleUploadData()
     {
-        $imageUrl = null;
+        $imageUrl = 'zhopa';
         $authors = [];
         $genres = [];
 
@@ -41,14 +41,15 @@ class AddForm extends BaseForm
             $genres = GenreRepository::findBy(['name' => $this->genres]);
         }
 
-        $book = Book::create([
+        $params = [
             'name' => $this->name,
             'description' => $this->description,
             'published_date' => strtotime($this->published_date),
             'cover_image_url' => $imageUrl,
             'authors' => $authors,
             'genres' => $genres,
-        ]);
+        ];
+        $book = Book::create($params);
 
         BooksRepository::save($book);
     }

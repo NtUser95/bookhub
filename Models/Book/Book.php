@@ -170,16 +170,17 @@ class Book
         $book->setImageUrl($params['cover_image_url'] ?? '');
 
         if (isset($params['id']) && $params['id']) {
-            $book->_id = (int)$params['id'];
+            $book->_id = (int) $params['id'];
         } else {
-            $sql = 'INSERT INTO book (`name`, `description`, `published_date`, `cover_image_url`) VALUES ( :f_name , :description , :published_date , :cover_image_url );';
-            App::$db->execute($sql, [
-                ':f_name' => $params['name'],
-                ':description' => $params['description'],
-                ':published_date' => $params['published_date'],
-                ':cover_image_url' => $params['cover_image_url'],
-            ]);
-            $book->_id = (int)App::$db->getLastInsertId();
+            $sql = 'INSERT INTO `books` (`name`,`cover_image_url`, `description`, `published_date`) VALUES (?, ?, ?, ?);';
+            $params = [
+                $params['name'],
+                $params['cover_image_url'],
+                $params['description'],
+                $params['published_date'],
+            ];
+            App::$db->execute($sql, $params);
+            $book->_id = (int) App::$db->getLastInsertId();
         }
 
         return $book;
