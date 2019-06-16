@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Exceptions\UnknownClassException;
+use Models\FileSystem\FileSystem;
+use Models\FileSystem\SimpleFileSystem;
 use Throwable;
 
 class App
@@ -13,6 +15,8 @@ class App
     public static $kernel;
     public static $user;
     public static $config;
+    /** @var FileSystem */
+    public static $fileSystem;
 
     public static function init()
     {
@@ -27,6 +31,7 @@ class App
         static::$kernel = new Kernel();
         static::$db = new Db();
         static::$user = new User();
+        static::$fileSystem = new SimpleFileSystem();
 
         self::$config = include __DIR__ . '/../Config/main.php';
     }

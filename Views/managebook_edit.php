@@ -1,4 +1,4 @@
-<form class="needs-validation" method="post" novalidate="">
+<form class="needs-validation" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?= $form->id ?>">
     <div class="row">
         <div class="col-md-4 order-md-2 mb-4">

@@ -157,7 +157,7 @@ class SearchQuery
         if ($preparedLimit['query']) {
             $sql .= ' LIMIT ' . $preparedLimit['query'];
             $values = array_merge($values, $preparedLimit['values']);
-        }var_dump($sql, $values);
+        }
 
         return App::$db->execute($sql, $values);
     }

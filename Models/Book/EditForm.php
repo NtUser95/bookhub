@@ -2,9 +2,11 @@
 
 namespace Models\Book;
 
+use App\App;
 use Models\Book\Author\AuthorsRepository;
 use Models\Book\Genre\GenreRepository;
 use Models\Form\EditableForm;
+use Models\ImageUploader\SimpleImageUploader;
 
 class EditForm extends EditableForm
 {
@@ -34,7 +36,12 @@ class EditForm extends EditableForm
     public function handleUploadData()
     {
         $book = BooksRepository::get((int) $this->id);
-
+        if ($_FILES['cover_image_url']) {
+            $imageUploader = new SimpleImageUploader();
+            $imageUploader->setImageSource($_FILES['cover_image_url']['tmp_name']);
+            $imageUploader->validateImage();
+            var_dump($imageUploader->saveImage());die();
+        }
         if ($this->authors) {
             $this->authors = trim(str_replace(', ', ',', $this->authors));
             $rawAuthors = explode(',', $this->authors);
@@ -61,9 +68,6 @@ class EditForm extends EditableForm
         }
         if ($this->description) {
             $book->setDescription($this->description);
-        }
-        if ($this->cover_image_url) {
-            $book->setImageUrl($this->cover_image_url);
         }
 
         BooksRepository::save($book);
