@@ -5,12 +5,15 @@ namespace Models\FileSystem;
 class DownloadableEntity
 {
     /** @var string */
+    private $id;
+    /** @var string */
     private $externalPath;
     /** @var string */
     private $internalPath;
 
-    public function __construct($externalPath, $internalPath)
+    public function __construct($id, $externalPath, $internalPath)
     {
+        $this->id = $id;
         $this->externalPath = $externalPath;
         $this->internalPath = $internalPath;
     }
@@ -46,4 +49,13 @@ class DownloadableEntity
     {
         return mime_content_type($this->internalPath);
     }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
 }

@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/books-index.css">
+
 <div class="dropdown filter-dropdown">
     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Все жанры
@@ -48,18 +50,19 @@
 <div class="row">
     <?PHP foreach ($books as $book) { ?>
         <div class="col-md-3 book-block">
-            <div class="row">
+            <div class="row book-title">
                 <h4>
                     <strong><?= $book->getName() ?></strong>
                 </h4>
             </div>
-            <div class="row">
+            <div class="row book-description">
                 <?= $book->getDescription() ?>
             </div>
-            <div class="row">
-                <img src="/images/book_preview.png" title="book preview">
+            <div class="row book-image">
+                <?PHP $logoUrl = $book->getImageEntity() ? $book->getImageEntity()->getExternalPath() : '/images/book_preview.png'; ?>
+                <img src="<?= $logoUrl ?>" class="book-image" title="book preview">
             </div>
-            <div class="row">
+            <div class="row book-badges">
                 badges
             </div>
         </div>

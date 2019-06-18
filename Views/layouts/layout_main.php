@@ -16,8 +16,6 @@
         </div>
 
         <div class="container">
-            <link rel="stylesheet" href="/css/books-index.css">
-
             <div class="breadcrumbs">
                 breadcrumbs >> crumbs
             </div>

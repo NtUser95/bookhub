@@ -6,10 +6,10 @@ use App\Exceptions\UnknownClassException;
 use Models\FileSystem\FileSystem;
 use Models\FileSystem\SimpleFileSystem;
 use Throwable;
+use App\Exceptions\InvalidRouteException;
 
 class App
 {
-
     public static $router;
     public static $db;
     public static $kernel;
@@ -54,7 +54,7 @@ class App
 
     public static function handleException(Throwable $e)
     {
-        if ($e instanceof \App\Exceptions\InvalidRouteException) {
+        if ($e instanceof InvalidRouteException) {
             echo static::$kernel->launchAction('Error', 'error404', [$e]);
         } else {
             echo static::$kernel->launchAction('Error', 'error500', [$e]);

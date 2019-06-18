@@ -1,6 +1,24 @@
 .book-block {
     background-color: #cccccc;
     margin: 10px;
+    height: 400px;
+    max-width: 250px;
+}
+
+.book-title {
+    margin: 0px;
+}
+
+.book-description {
+    margin: 0px;
+}
+
+.book-image {
+     margin: 0px;
+ }
+
+.book-badges {
+    margin: 0px;
 }
 
 .filter-dropdown {

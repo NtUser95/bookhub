@@ -5,6 +5,7 @@ namespace Models\Book;
 use App\App;
 use Models\Book\Author\Author;
 use Models\Book\Genre\Genre;
+use Models\FileSystem\DownloadableEntity;
 
 class Book
 {
@@ -20,8 +21,8 @@ class Book
     private $_name;
     /** @var string */
     private $_description;
-    /** @var string */
-    private $_imageUrl;
+    /** @var DownloadableEntity */
+    private $_imageEntity;
 
     /**
      * @return int
@@ -123,24 +124,24 @@ class Book
             'description' => $this->_description,
             'name' => $this->_name,
             'published_date' => $this->_publishedDate,
-            'cover_image_url' => $this->_imageUrl,
+            'cover_image_url' => $this->_imageEntity,
         ];
     }
 
     /**
-     * @return int
+     * @return DownloadableEntity
      */
-    public function getImageUrl(): string
+    public function getImageEntity(): ?DownloadableEntity
     {
-        return $this->_imageUrl;
+        return $this->_imageEntity;
     }
 
     /**
-     * @param string $imageUrl
+     * @param DownloadableEntity $image
      */
-    public function setImageUrl(string $imageUrl)
+    public function setImageEntity(DownloadableEntity $image)
     {
-        $this->_imageUrl = $imageUrl;
+        $this->_imageEntity = $image;
     }
 
     /**
@@ -169,7 +170,11 @@ class Book
         $book->setPublishedDate($params['published_date']);
         $book->setAuthors($params['authors']);
         $book->setGenre($params['genres']);
-        $book->setImageUrl($params['cover_image_url'] ?? '');
+
+
+        if (isset($params['cover_image_url']) && $params['cover_image_url']) {
+            $book->setImageEntity(App::$fileSystem->getFile(['fileId' => $params['cover_image_url']]));
+        }
 
         if (isset($params['id']) && $params['id']) {
             $book->_id = (int) $params['id'];

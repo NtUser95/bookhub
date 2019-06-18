@@ -2,7 +2,6 @@
 
 namespace Models\Book;
 
-use App\App;
 use Models\Book\Author\AuthorsRepository;
 use Models\Book\Genre\GenreRepository;
 use Models\Form\EditableForm;
@@ -39,8 +38,22 @@ class EditForm extends EditableForm
         if ($_FILES['cover_image_url']) {
             $imageUploader = new SimpleImageUploader();
             $imageUploader->setImageSource($_FILES['cover_image_url']['tmp_name']);
+            $imageUploader->setAllowedExtensions([
+                'jpg', 'jpeg', 'png', 'gif',
+            ]);
+            $imageUploader->setAllowedDimensions([
+                'min_h' => 50,
+                'max_h' => 1000,
+                'min_w' => 50,
+                'max_w' => 1000,
+            ]);
+            $imageUploader->setAllowedSize([
+                'min' => 10,
+                'max' => 1024,
+            ]);
             $imageUploader->validateImage();
-            var_dump($imageUploader->saveImage());die();
+            $downloadableEntity = $imageUploader->saveImage();
+            $book->setImageEntity($downloadableEntity);
         }
         if ($this->authors) {
             $this->authors = trim(str_replace(', ', ',', $this->authors));
@@ -70,6 +83,9 @@ class EditForm extends EditableForm
             $book->setDescription($this->description);
         }
 
-        BooksRepository::save($book);
+        $modelReceivedSomeData = $_FILES['cover_image_url'] || $this->authors || $this->genres || $this->published_date || $this->name || $this->description;
+        if ($modelReceivedSomeData) {
+            BooksRepository::save($book);
+        }
     }
 }

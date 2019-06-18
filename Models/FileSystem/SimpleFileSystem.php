@@ -29,7 +29,7 @@ class SimpleFileSystem implements FileSystem
         $internalPath = $fileDir;
         $externalPath = DIRECTORY_SEPARATOR . 'upload' . DIRECTORY_SEPARATOR . $params['fileId'];
 
-        return new DownloadableEntity($externalPath, $internalPath);
+        return new DownloadableEntity($params['fileId'], $externalPath, $internalPath);
     }
 
     public function fileExists($params = []): bool

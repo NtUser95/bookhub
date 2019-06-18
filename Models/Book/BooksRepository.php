@@ -47,6 +47,7 @@ class BooksRepository
                     'id' => $value['id'],
                     'name' => $value['name'],
                     'description' => $value['description'],
+                    'cover_image_url' => $value['cover_image_url'],
                     'published_date' => $value['published_date'],
                     'authors' => AuthorsRepository::findBy(['book_id' => (int)$value['id']]),
                     'genres' => GenreRepository::findBy(['book_id' => (int)$value['id']]),
@@ -83,6 +84,7 @@ class BooksRepository
                 'id' => $dbData[0]['id'],
                 'name' => $dbData[0]['name'],
                 'description' => $dbData[0]['description'],
+                'cover_image_url' => $dbData[0]['cover_image_url'],
                 'published_date' => $dbData[0]['published_date'],
                 'authors' => AuthorsRepository::findBy(['book_id' => (int) $dbData[0]['id']]),
                 'genres' => GenreRepository::findBy(['book_id' => (int) $dbData[0]['id']]),
@@ -99,11 +101,13 @@ class BooksRepository
 
     public static function save(Book $book)
     {
-        $sql = 'UPDATE `books` SET `name` = ?, `description` = ?, `published_date` = ? WHERE `id` = ?';
+        $imageInternalUrl = $book->getImageEntity() ? $book->getImageEntity()->getId() : '';
+        $sql = 'UPDATE `books` SET `name` = ?, `description` = ?, `published_date` = ?, `cover_image_url` = ? WHERE `id` = ?';
         App::$db->execute($sql, [
             $book->getName(),
             $book->getDescription(),
             $book->getPublishedDate(),
+            $imageInternalUrl,
             $book->getId(),
         ]);
         foreach ($book->getGenre() as $genre) {
